@@ -1,0 +1,270 @@
+/* =========================
+   SCORE STRIP & PODIUMS
+   ========================= */
+
+.score-strip {
+  height: var(--scoreH);
+  width: 100vw;
+  display: grid;
+  border-top: var(--line) solid var(--grid);
+  background: var(--grid);
+  z-index: 3;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.podium {
+  background: var(--blue);
+  border-left: var(--line) solid var(--grid);
+  border-right: var(--line) solid var(--grid);
+  border-bottom: var(--line) solid var(--grid);
+  display: grid;
+  /* Flexible row heights - score row scales with content, signature gets remaining space */
+  grid-template-rows: minmax(32px, auto) 1fr;
+  gap: 0;
+  position: relative;
+  user-select: none;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Score Row */
+.score-row {
+  display: grid;
+  grid-template-columns: 46px 1fr 46px;
+  align-items: center;
+  border-bottom: var(--line) solid var(--grid);
+  background: rgba(0,0,0,0.18);
+  min-height: 32px;
+  padding: 4px 0;
+}
+
+.score-row.board-mode {
+  grid-template-columns: 1fr;
+}
+
+.score-btn {
+  height: 100%;
+  min-height: 32px;
+  display: grid;
+  place-items: center;
+  font-family: "Swiss911", sans-serif;
+  font-size: clamp(18px, 3vmin, 28px);
+  color: var(--white);
+  background: rgba(0,0,0,0.18);
+  cursor: pointer;
+  border-right: var(--line) solid var(--grid);
+  box-sizing: border-box;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.score-btn.plus {
+  border-right: none;
+  border-left: var(--line) solid var(--grid);
+}
+
+.score-btn:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.score-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: rgba(0,0,0,0.35);
+}
+
+.score-btn.disabled:hover {
+  background: rgba(0,0,0,0.35);
+}
+
+.score-value {
+  font-family: "Swiss911", sans-serif;
+  font-size: clamp(16px, 2.8vmin, 26px);
+  letter-spacing: 0.03em;
+  color: var(--white);
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.score-value.negative {
+  color: #ff3b30;
+}
+
+/* Dollar sign styling - smaller than value */
+.score-value::before {
+  content: attr(data-currency);
+  font-size: 0.7em;
+  opacity: 0.9;
+}
+
+/* Signature Box */
+.sig-box {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  padding: min(12px, 1.5vmin) 0;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+.team-name {
+  position: absolute;
+  bottom: min(8px, 1vmin);
+  left: min(10px, 1.2vmin);
+  font-family: "ITCKorrina", serif;
+  font-size: clamp(9px, 1.6vmin, 14px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  pointer-events: none;
+  max-width: calc(100% - min(20px, 2.4vmin));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.sig-img {
+  width: 84%;
+  height: 100%;
+  max-height: calc(var(--scoreH) - 70px);
+  object-fit: contain;
+  background: transparent;
+  border: none;
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,0.55));
+}
+
+.sig-placeholder {
+  font-family: "Swiss911", sans-serif;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: clamp(12px, 2vmin, 18px);
+}
+
+/* Responsive adjustments for small screens */
+@media (max-height: 900px) {
+  .podium {
+    grid-template-rows: minmax(28px, auto) 1fr;
+  }
+  
+  .score-row {
+    min-height: 28px;
+  }
+  
+  .score-btn {
+    min-height: 28px;
+    font-size: clamp(16px, 2.8vmin, 24px);
+  }
+  
+  .score-value {
+    font-size: clamp(14px, 2.4vmin, 22px);
+  }
+  
+  .team-name {
+    font-size: clamp(8px, 1.4vmin, 12px);
+  }
+  
+  .sig-placeholder {
+    font-size: clamp(10px, 1.8vmin, 16px);
+  }
+}
+
+/* Large screen improvements */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .podium {
+    grid-template-rows: minmax(38px, auto) 1fr;
+  }
+  
+  .score-row {
+    min-height: 38px;
+  }
+  
+  .score-btn {
+    min-height: 38px;
+    font-size: clamp(22px, 3.5vmin, 34px);
+  }
+  
+  .score-value {
+    font-size: clamp(20px, 3.2vmin, 32px);
+  }
+  
+  .team-name {
+    font-size: clamp(11px, 1.9vmin, 18px);
+  }
+  
+  .sig-placeholder {
+    font-size: clamp(15px, 2.4vmin, 24px);
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 2560px) and (min-height: 1440px) {
+  .score-value {
+    font-size: clamp(24px, 3.6vmin, 40px);
+  }
+  
+  .score-btn {
+    font-size: clamp(26px, 4vmin, 42px);
+  }
+  
+  .team-name {
+    font-size: clamp(13px, 2.2vmin, 22px);
+  }
+}
+
+/* Scores Modal Specific */
+#scoresModal .modal-card {
+  width: min(400px, 50vw);
+}
+
+.scores-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.score-edit-row {
+  display: grid;
+  grid-template-columns: 1fr minmax(180px, 240px);
+  column-gap: 14px;
+  row-gap: 6px;
+  align-items: center;
+}
+
+.score-edit-name {
+  font-family: "Swiss911", sans-serif;
+  color: rgba(255,255,255,0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.money-input-wrap {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.money-prefix {
+  font-family: "Swiss911", sans-serif;
+  color: rgba(255,255,255,0.85);
+  text-align: center;
+  font-size: 18px;
+}

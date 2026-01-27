@@ -1,0 +1,234 @@
+/* =========================
+   GAME BOARD
+   ========================= */
+
+#gameScreen {
+  grid-template-rows: 1fr var(--scoreH);
+  grid-template-columns: 1fr;
+  place-items: stretch;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.board-wrap {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - var(--scoreH));
+  display: grid;
+  place-items: stretch;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 1.15fr repeat(5, 1fr);
+  width: 100%;
+  height: 100%;
+  max-height: calc(100vh - var(--scoreH) - 6px);
+  border: var(--line) solid var(--grid);
+  box-sizing: border-box;
+  background: var(--grid);
+  gap: 0;
+}
+
+.cell {
+  background: var(--blue);
+  border: var(--line) solid var(--grid);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1.2vmin;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* Category Headers */
+.cat {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: clamp(14px, 2.1vw, 42px);
+  line-height: 1.05;
+  text-shadow: 0 3px 0 rgba(0,0,0,0.55);
+}
+
+/* Value Display */
+.value {
+  display: inline-flex;
+  align-items: center;
+  font-family: "Swiss911", sans-serif;
+  color: var(--gold);
+  /* Use viewport height for sizing to stay proportional to available space */
+  font-size: clamp(34px, calc((100vh - var(--scoreH)) / 12), 140px);
+  letter-spacing: 0.04em;
+  text-shadow:
+    6px 6px 0 rgba(0,0,0,0.75),
+    0 0 12px rgba(0,0,0,0.35);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.value .currency {
+  font-size: 0.7em;    /* smaller than the number */
+  line-height: 1;
+  margin-right: 0.06em;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Responsive scaling for small screens */
+@media (max-height: 900px) {
+  .cat {
+    font-size: clamp(12px, 1.9vw, 32px);
+  }
+  
+  .value {
+    font-size: clamp(28px, calc((100vh - var(--scoreH)) / 14), 80px);
+  }
+}
+
+@media (max-height: 768px) {
+  .cat {
+    font-size: clamp(11px, 1.7vw, 28px);
+  }
+  
+  .value {
+    font-size: clamp(24px, calc((100vh - var(--scoreH)) / 15), 70px);
+  }
+}
+
+/* Responsive scaling for large screens */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .cat {
+    font-size: clamp(18px, 2.4vw, 54px);
+  }
+  
+  .value {
+    /* On large screens, scale based on available board height */
+    font-size: clamp(50px, calc((100vh - var(--scoreH)) / 10), 180px);
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 2560px) and (min-height: 1440px) {
+  .cat {
+    font-size: clamp(22px, 2.8vw, 70px);
+  }
+  
+  .value {
+    font-size: clamp(60px, calc((100vh - var(--scoreH)) / 9), 220px);
+  }
+}
+
+/* Tile States */
+.tile {
+  cursor: pointer;
+}
+
+.tile:hover {
+  filter: brightness(1.08);
+}
+
+.tile.used {
+  cursor: default;
+}
+
+.tile.used .value {
+  opacity: 0;
+  text-shadow: none;
+}
+
+/* =========================
+   CATEGORY DESCRIPTION ON HOVER
+   Add this to the end of your board.css file
+   ========================= */
+
+/* Make category cell relative for absolute positioning */
+.cell:has(.cat-desc) {
+  position: relative;
+}
+
+/* Category name - positioned absolutely to overlap with description */
+.cat {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+/* Description - positioned absolutely to overlap with category name */
+.cat-desc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Swiss911", sans-serif;
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-shadow: 0 3px 0 rgba(0,0,0,0.55);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  /* Responsive font sizing */
+  font-size: clamp(11px, 1.6vw, 20px);
+  padding: 1vmin;
+  text-align: center;
+  /* Multi-line text wrapping */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  z-index: 1;
+}
+
+/* On hover: hide category name, show description */
+.cell:hover .cat {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cell:hover .cat-desc {
+  opacity: 0.75;
+  visibility: visible;
+}
+
+/* Ensure normal cursor on category cells */
+.cell:has(.cat-desc) {
+  cursor: default;
+}
+
+/* Responsive font sizing for descriptions */
+@media (max-height: 900px) {
+  .cat-desc {
+    font-size: clamp(10px, 1.4vw, 17px);
+  }
+}
+
+@media (max-height: 768px) {
+  .cat-desc {
+    font-size: clamp(9px, 1.3vw, 15px);
+  }
+}
+
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .cat-desc {
+    font-size: clamp(13px, 1.8vw, 24px);
+  }
+}
+
+@media (min-width: 2560px) and (min-height: 1440px) {
+  .cat-desc {
+    font-size: clamp(15px, 2vw, 28px);
+  }
+}

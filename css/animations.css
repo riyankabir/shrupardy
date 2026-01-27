@@ -1,0 +1,97 @@
+/* =========================
+   TITLE SCREEN ANIMATIONS
+   ========================= */
+
+/* Rotating Rays */
+#startScreen::before {
+  content: "";
+  position: absolute;
+  width: 260vmax;
+  height: 260vmax;
+  left: 50%;
+  top: 28%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  transform-origin: 50% 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.18;
+  mix-blend-mode: screen;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(255,255,255,0.55) 0deg 6deg,
+    rgba(255,255,255,0.00) 6deg 18deg
+  );
+  filter: blur(1.2px);
+  animation: titleRaysSpin 32s linear infinite;
+}
+
+@keyframes titleRaysSpin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1.05);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1.05);
+  }
+}
+
+/* 4-Point Starfield */
+#titleStars {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  opacity: 0;
+  background: rgba(255,255,255,0.92);
+  clip-path: polygon(
+    50% 0%,
+    62% 38%,
+    100% 50%,
+    62% 62%,
+    50% 100%,
+    38% 62%,
+    0% 50%,
+    38% 38%
+  );
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.35));
+  animation:
+    twinkle var(--tw) ease-in-out infinite,
+    drift var(--dr) linear infinite;
+  animation-delay: var(--dly);
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) rotate(var(--r0));
+  }
+  15% {
+    opacity: var(--op);
+  }
+  50% {
+    opacity: calc(var(--op) * 0.35);
+    transform: scale(1.35) rotate(var(--r1));
+  }
+  85% {
+    opacity: var(--op);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7) rotate(var(--r2));
+  }
+}
+
+@keyframes drift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: var(--dx) var(--dy);
+  }
+}

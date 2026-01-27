@@ -1,0 +1,68 @@
+/* =========================
+   THEME VARIABLES
+   ========================= */
+:root {
+  /* Colors */
+  --blue: #001a82;
+  --blue2: #00136a;
+  --grid: #000000;
+  --white: #ffffff;
+  --gold: #31B2E7;
+  --gold2: #5BCBF5;
+  --goldRGBA: 49, 178, 231;
+  --gold2RGBA: 91, 203, 245;
+  --overlay: rgba(0,0,0,0.72);
+
+  /* Layout */
+  --line: 3px;
+  
+  /* Scoreboard strip height - highly responsive to screen size */
+  --scoreH: clamp(110px, 16vh, 180px);
+  
+  /* Final Jeopardy - Easy Controls */
+  --fj-margin: 20px;                              /* Black margin around tiles */
+  --fj-wager-sig-height: clamp(240px, 35vh, 500px);  /* Wager podium signature height */
+  --fj-winner-sig-height: clamp(300px, 40vh, 600px); /* Winner podium signature height */
+  --fj-ray-width: 6deg;                           /* Width of spinning ray bars (try 3deg-12deg) */
+  --fj-ray-gap: 18deg;                            /* Gap between ray bars (try 12deg-30deg) */
+  --fj-ray-color: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================
+   RESPONSIVE BREAKPOINTS
+   ========================= */
+
+/* Small/medium laptops (14-15 inch) - prevent overlap with $1000 row */
+@media (max-height: 900px) {
+  :root {
+    --scoreH: clamp(90px, 14vh, 140px);
+  }
+}
+
+/* Very short screens */
+@media (max-height: 768px) {
+  :root {
+    --scoreH: clamp(80px, 12vh, 120px);
+  }
+}
+
+/* Extra short screens */
+@media (max-height: 600px) {
+  :root {
+    --scoreH: clamp(70px, 11vh, 100px);
+  }
+}
+
+/* Large screens (1920px+) - scale up modestly */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  :root {
+    --scoreH: clamp(120px, 16vh, 200px);
+  }
+}
+
+/* Extra large screens (2560px+) - scale up more but stay reasonable */
+@media (min-width: 2560px) and (min-height: 1440px) {
+  :root {
+    --scoreH: clamp(140px, 17vh, 240px);
+  }
+}

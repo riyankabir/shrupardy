@@ -1,0 +1,672 @@
+/* =========================
+   START SCREEN
+   ========================= */
+
+#startScreen {
+  grid-template-rows: 1fr var(--scoreH);
+  grid-template-columns: 1fr;
+  place-items: stretch;
+  z-index: 1;
+  position: fixed;
+  overflow: hidden;
+}
+
+.start-main {
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 2;
+  padding: 24px 0;
+  box-sizing: border-box;
+}
+
+.start-wrap {
+  width: min(980px, 92vw);
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+  text-align: center;
+}
+
+.logo {
+  font-family: "Geoparody", serif;
+  color: var(--white);
+  font-size: clamp(64px, 10vw, 140px);
+  letter-spacing: 0.02em;
+  text-shadow: 6px 6px 0 rgba(0,0,0,0.55);
+  margin-top: 10px;
+}
+
+.start-panel {
+  width: 100%;
+  border: var(--line) solid var(--grid);
+  background: rgba(0,0,0,0.18);
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.start-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.sr-only{
+  position:absolute;
+  width:1px; height:1px;
+  padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0);
+  white-space:nowrap; border:0;
+}
+
+.segmented{
+  display:flex;
+  width:100%;
+  border-radius:14px;
+  overflow:hidden;
+  background: rgba(0,0,0,0.35);
+  border: 2px solid rgba(255,255,255,0.15);
+  font-family: "ITCKorrina", serif;
+}
+
+.segmented button{
+  flex:1;
+  min-width:0;
+  padding: 0.55em 0;
+  font: inherit;
+  letter-spacing: inherit;
+  border:0;
+  background: transparent;
+  color: rgba(255,255,255,0.9);
+  cursor:pointer;
+}
+
+.segmented button + button{
+  border-left: 2px solid rgba(255,255,255,0.10);
+}
+
+.segmented button.active{
+  background: var(--gold);
+  color: var(--white);
+}
+
+/* Make sure title screen content stays above rays/stars */
+#startScreen > * {
+  position: relative;
+  z-index: 2;
+}
+
+#startScreen > :not(.debug-toggle) {
+  position: relative;
+  z-index: 2;
+}
+
+#startScreen .debug-toggle {
+  position: absolute;
+  z-index: 10;
+}
+
+/* =========================
+   DEBUG TOGGLE
+   ========================= */
+
+.debug-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: none; /* Hidden by default */
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+/* Only show on start screen */
+#startScreen .debug-toggle {
+  display: flex;
+}
+
+.debug-label {
+  font-family: "ITCKorrina", serif;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.debug-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.debug-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.debug-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.debug-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: rgba(255, 255, 255, 0.25);
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .debug-slider {
+  background-color: rgba(215, 175, 55, 0.3);
+  border-color: rgba(215, 175, 55, 0.5);
+}
+
+input:checked + .debug-slider:before {
+  transform: translateX(20px);
+  background-color: var(--gold);
+}
+
+.debug-slider:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+input:checked + .debug-slider:hover {
+  background-color: rgba(215, 175, 55, 0.4);
+}
+
+/* =========================
+   CLUE & DD OVERLAYS
+   ========================= */
+
+#clueOverlay, #ddOverlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 20;
+  grid-template-rows: 1fr var(--scoreH);
+  grid-template-columns: 1fr;
+}
+
+#clueOverlay.show, #ddOverlay.show {
+  display: grid;
+}
+
+.clue-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 1vmin 0;
+}
+
+.clue-content {
+  width: 100%;
+  max-width: min(1200px, 94vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5vmin;
+  padding: 1vmin;
+  box-sizing: border-box;
+}
+
+.clue-text {
+  padding: 3vmin 4vmin;
+  text-align: center;
+  font-family: "ITCKorrina", serif;
+  color: var(--white);
+  font-size: clamp(28px, 3.4vw, 72px);
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  text-transform: uppercase;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.55);
+  user-select: text;
+  max-width: 100%;
+}
+
+.answer-text {
+  /* Always reserve space for answer, even when hidden */
+  min-height: 1.8em;
+  padding: 1.5vmin 3vmin;
+  font-family: "ITCKorrina", serif;
+  color: var(--gold);
+  opacity: 0.50;
+  font-size: clamp(18px, 2.2vw, 42px);
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 3px 0 rgba(0,0,0,0.55);
+  /* Hide content but keep space */
+  visibility: hidden;
+  max-width: 100%;
+}
+
+.answer-text.show {
+  visibility: visible;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-height: 768px) {
+  .clue-text {
+    font-size: clamp(22px, 2.8vw, 48px);
+    padding: 2vmin 3vmin;
+  }
+  
+  .answer-text {
+    font-size: clamp(14px, 1.8vw, 28px);
+    padding: 1vmin 2vmin;
+  }
+}
+
+/* Large screens - bigger fonts */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .clue-text {
+    font-size: clamp(36px, 4vw, 90px);
+  }
+  
+  .answer-text {
+    font-size: clamp(24px, 2.6vw, 54px);
+  }
+}
+
+/* Extra large screens - even bigger */
+@media (min-width: 2560px) and (min-height: 1440px) {
+  .clue-text {
+    font-size: clamp(44px, 4.4vw, 110px);
+  }
+  
+  .answer-text {
+    font-size: clamp(28px, 3vw, 64px);
+  }
+}
+
+.back-btn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 30;
+  font-family: "Geoparody", serif;
+  font-size: 44px;
+  color: rgba(255,255,255,0.25);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  color: rgba(255,255,255,0.45);
+}
+
+.reveal-btn {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 30;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: url("../assets/reveal.png") center/cover no-repeat;
+  opacity: 0.25;
+}
+
+.reveal-btn:hover {
+  opacity: 0.45;
+}
+
+.media-btn {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  z-index: 30;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: rgba(var(--gold2RGBA), 0.2);
+  border: 2px solid rgba(var(--gold2RGBA), 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.media-btn:hover {
+  background: rgba(var(--gold2RGBA), 0.3);
+  border-color: rgba(var(--gold2RGBA), 0.6);
+  transform: scale(1.05);
+}
+
+.media-btn::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 12px 0 12px 20px;
+  border-color: transparent transparent transparent var(--gold);
+  margin-left: 4px;
+}
+
+/* =========================
+   VIDEO CLUES
+   ========================= */
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: min(1000px, 90vw);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Add dark overlay that appears when video ends */
+.video-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7); /* Dark overlay */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.video-container.ended::after {
+  opacity: 1;
+}
+
+.clue-video {
+  width: 100%;
+  max-width: 100%;
+  max-height: calc(100vh - var(--scoreH) - 250px);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  z-index: 0;
+}
+
+.video-replay-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+  background: transparent; /* Remove background */
+  border: none; /* Remove border */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  z-index: 2;
+}
+
+.video-replay-btn:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.video-replay-btn svg {
+  width: 72px; /* Bigger */
+  height: 72px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
+  stroke: var(--gold); /* Gold color */
+  stroke-width: 2.5;
+}
+
+/* Remove the play triangle - keep only the replay arrow */
+.video-replay-btn svg polygon {
+  display: none;
+}
+
+/* Responsive video sizing */
+@media (max-height: 768px) {
+  .clue-video {
+    max-height: calc(100vh - var(--scoreH) - 140px);
+  }
+  
+  .video-replay-btn svg {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .video-replay-btn svg {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+/* =========================
+   MEDIA POPUP
+   ========================= */
+
+.media-popup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 35;
+  cursor: pointer;
+  padding: 2vmin;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.media-popup.show {
+  opacity: 1;
+}
+
+.media-popup-content {
+  max-width: min(1000px, 90vw);
+  max-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  position: relative;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.media-popup.show .media-popup-content {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.media-popup video {
+  width: 100%;
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+/* Hide controls by default, show on hover */
+.media-popup video::-webkit-media-controls {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.media-popup video:hover::-webkit-media-controls {
+  opacity: 1;
+}
+
+/* For Firefox */
+.media-popup video::-moz-media-controls {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.media-popup video:hover::-moz-media-controls {
+  opacity: 1;
+}
+
+.media-popup audio {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Responsive sizing */
+@media (max-height: 768px) {
+  .media-popup-content {
+    max-height: 80vh;
+  }
+  
+  .media-popup video {
+    max-height: 80vh;
+  }
+}
+
+/* =========================
+   DAILY DOUBLE OVERLAY
+   ========================= */
+
+.dd-wrap {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.dd-text {
+  font-family: "Geoparody", serif;
+  color: var(--gold);
+  font-size: clamp(70px, 9vw, 160px);
+  letter-spacing: 0.10em;
+  text-shadow:
+    8px 8px 0 rgba(0,0,0,0.85),
+    0 0 18px rgba(0,0,0,0.35);
+  text-transform: uppercase;
+}
+
+.dd-wager-input {
+  margin: 3vmin auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5vmin;
+}
+
+.dd-wager-input label {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: clamp(16px, 2vw, 28px);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-shadow: 0 3px 0 rgba(0,0,0,0.55);
+}
+
+.dd-wager-input .money-input-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.dd-wager-input .money-prefix {
+  font-family: "Swiss911", sans-serif;
+  color: rgba(255,255,255,0.85);
+  font-size: 28px;
+  text-align: center;
+}
+
+.dd-wager-input input {
+  width: 200px;
+  font-size: 28px;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.dd-sub {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: clamp(16px, 2.0vw, 28px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 18px;
+  text-shadow: 0 3px 0 rgba(0,0,0,0.55);
+}
+
+/* =========================
+   RESPONSIVE SCALING
+   ========================= */
+
+/* Small screens */
+@media (max-height: 768px) {
+  .clue-text {
+    font-size: clamp(22px, 2.8vw, 48px);
+  }
+  
+  .answer-text {
+    font-size: clamp(14px, 1.8vw, 28px);
+  }
+  
+  .dd-text {
+    font-size: clamp(50px, 7vw, 120px);
+  }
+  
+  .dd-sub {
+    font-size: clamp(14px, 1.6vw, 22px);
+  }
+}
+
+/* Large screens */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .clue-text {
+    font-size: clamp(36px, 4vw, 80px);
+  }
+  
+  .answer-text {
+    font-size: clamp(24px, 2.6vw, 48px);
+  }
+  
+  .dd-text {
+    font-size: clamp(90px, 10vw, 200px);
+  }
+  
+  .dd-sub {
+    font-size: clamp(20px, 2.4vw, 36px);
+  }
+  
+  .logo {
+    font-size: clamp(80px, 11vw, 180px);
+  }
+}

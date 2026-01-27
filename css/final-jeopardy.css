@@ -1,0 +1,845 @@
+/* =========================
+   FINAL JEOPARDY STYLES - COMPLETE REWRITE
+   ========================= */
+
+/* Base overlay styles */
+.fj-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 100;
+}
+
+.fj-overlay.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================
+   TRIGGER BUTTON
+   ========================= */
+
+.fj-trigger-btn {
+  font-size: clamp(24px, 3vw, 42px);
+  padding: 20px 40px;
+  transition: opacity var(--fj-fade, 500ms) ease;
+}
+
+/* =========================
+   REUSABLE REVEAL BUTTON
+   ========================= */
+
+.fj-reveal-btn {
+  background: url("../assets/reveal.png") center/contain no-repeat;
+  border: none;
+  cursor: pointer;
+  transition: opacity 1s ease;
+  animation: 
+    fj-revealSpin var(--fj-spin, 4s) linear infinite,
+    fj-revealGlow var(--fj-glow, 2s) ease-in-out infinite;
+  z-index: 10;
+}
+
+.fj-reveal-btn.large {
+  width: clamp(100px, 15vw, 140px);
+  height: clamp(100px, 15vw, 140px);
+}
+
+.fj-reveal-btn.small {
+  width: clamp(60px, 10vw, 90px);
+  height: clamp(60px, 10vw, 90px);
+  position: relative;
+}
+
+.fj-reveal-btn.bottom-right {
+  position: fixed;
+  bottom: clamp(40px, 8vh, 80px);
+  right: clamp(40px, 8vw, 80px);
+}
+
+.fj-reveal-btn.top-right {
+  position: fixed;
+  top: clamp(30px, 5vh, 60px);
+  right: clamp(30px, 5vw, 60px);
+}
+
+.fj-btn-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: clamp(10px, 1.2vw, 14px);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+@keyframes fj-revealSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fj-revealGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 20px var(--gold)) 
+            drop-shadow(0 0 30px rgba(212, 166, 74, 0.6)); 
+  }
+  50% { 
+    filter: drop-shadow(0 0 40px var(--gold)) 
+            drop-shadow(0 0 60px rgba(212, 166, 74, 0.9)); 
+  }
+}
+
+/* =========================
+   TITLE SCREEN
+   ========================= */
+
+#fjTitle {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.fj-title-text {
+  font-family: "Geoparody", serif;
+  color: var(--white);
+  font-size: clamp(60px, 11vw, 180px);
+  letter-spacing: 0.04em;
+  text-shadow: 0 8px 0 rgba(0,0,0,0.6);
+  text-align: center;
+  line-height: 1.1;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 4;
+  opacity: 0;
+  animation: fjFadeIn 0.5s ease forwards 0.2s;
+}
+
+@keyframes fjFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Rotating rays background */
+.fj-rays {
+  position: absolute;
+  width: 260vmax;
+  height: 260vmax;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  background: repeating-conic-gradient(
+    from 0deg,
+    var(--fj-ray-color) 0deg var(--fj-ray-width),
+    transparent var(--fj-ray-width) var(--fj-ray-gap)
+  );
+  animation: 
+    fjFadeIn 0.8s ease forwards 0.2s,
+    fj-raysSpin var(--fj-rays, 25s) linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes fj-raysSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* =========================
+   CATEGORY & QUESTION SCREENS
+   ========================= */
+
+#fjCategory,
+#fjQuestion {
+  flex-direction: column;
+}
+
+/* HIDE "Category:" label */
+.fj-label {
+  display: none;
+}
+
+/* Category title uses Swiss911 */
+#fjCategory .fj-content {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: clamp(40px, 6vw, 100px);
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.6);
+  max-width: 90vw;
+  padding: 2vmin;
+}
+
+/* Question uses ITCKorrina */
+#fjQuestion .fj-content {
+  font-family: "ITCKorrina", serif;
+  color: var(--white);
+  font-size: clamp(32px, 5vw, 90px);
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.6);
+  max-width: 90vw;
+  padding: 2vmin;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.fj-arrow {
+  position: fixed;
+  bottom: clamp(40px, 8vh, 80px);
+  right: clamp(40px, 8vw, 80px);
+  font-size: clamp(32px, 5vw, 64px);
+  padding: 12px 24px;
+  min-width: 80px;
+}
+
+/* =========================
+   WAGER SCREEN
+   ========================= */
+
+#fjWager {
+  padding: 2vh 2vw;
+  box-sizing: border-box;
+}
+
+#fjWager.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.fj-wager-container {
+  width: max(1100px, 95vw);
+  height: min(90vh, 1000px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.5vh, 24px);
+  background: #000;
+}
+
+/* Top Tile: Wager Input (Gold) */
+.fj-wager-tile {
+  background: linear-gradient(180deg, var(--gold), var(--gold2));
+  border: var(--line) solid var(--grid);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: clamp(12px, 2vw, 24px);
+  padding: clamp(12px, 2vh, 24px) clamp(20px, 3vw, 40px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  flex: 0 0 auto;
+  min-height: clamp(60px, 8vh, 100px);
+}
+
+.fj-wager-currency {
+  font-family: "Swiss911", sans-serif;
+  font-size: clamp(24px, 3.5vw, 48px);
+  color: #000;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.fj-wager-input {
+  font-family: "Swiss911", sans-serif;
+  font-size: clamp(20px, 2.8vw, 40px);
+  padding: clamp(8px, 1.5vh, 16px) clamp(12px, 2vw, 20px);
+  border: none;
+  background: rgba(255,255,255,0.5);
+  color: #000;
+  text-align: center;
+  outline: none;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+.fj-wager-input::placeholder {
+  color: rgba(0,0,0,0.65);
+  font-weight: normal;
+  font-size: 0.85em;
+}
+
+.fj-wager-input::-webkit-outer-spin-button,
+.fj-wager-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.fj-wager-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: rgba(255,255,255,0.75);
+}
+
+.fj-lock-btn {
+  width: clamp(50px, 7vw, 80px);
+  height: clamp(50px, 7vw, 80px);
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.fj-lock-btn:hover {
+  opacity: 0.7;
+}
+
+.fj-lock-btn img {
+  width: 60%;
+  height: 60%;
+  filter: brightness(0);
+}
+
+.fj-lock-btn.arrow-mode {
+  background: transparent;
+  border: none;
+}
+
+.fj-lock-btn .arrow-symbol {
+  font-size: clamp(28px, 4vw, 52px);
+  color: #000;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Middle Tile: Team Info (Blue) */
+.fj-team-tile {
+  background: var(--blue);
+  border: var(--line) solid var(--grid);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(20px, 3vh, 40px) clamp(20px, 3vw, 40px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fj-team-podium {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fj-team-podium .sig-img {
+  max-width: 85%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+}
+
+.fj-team-podium .sig-placeholder {
+  font-family: "Swiss911", sans-serif;
+  color: rgba(255,255,255,0.35);
+  font-size: clamp(16px, 2.5vw, 32px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.fj-team-name-overlay {
+  position: absolute;
+  bottom: clamp(12px, 2vh, 24px);
+  left: clamp(16px, 2.5vw, 32px);
+  font-family: "Swiss911", sans-serif;
+  color: rgba(255,255,255,0.5);
+  font-size: clamp(14px, 2vw, 28px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  max-width: calc(100% - clamp(32px, 5vw, 64px));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Bottom Tile: Score/Buttons (Blue) */
+.fj-score-tile {
+  background: var(--blue);
+  border: var(--line) solid var(--grid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 2vh, 24px) clamp(20px, 3vw, 40px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  flex: 0 0 auto;
+  min-height: clamp(70px, 10vh, 120px);
+}
+
+.fj-score-display {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: clamp(32px, 5vw, 72px);
+  letter-spacing: 0.04em;
+  text-shadow: 
+    0 4px 0 rgba(0,0,0,0.7),
+    0 0 12px rgba(0,0,0,0.3);
+  line-height: 1;
+}
+
+.fj-score-display.negative {
+  color: #ff3b30;
+}
+
+.fj-answer-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 2vw, 24px);
+  width: 100%;
+}
+
+.fj-answer-btn {
+  font-family: "Swiss911", sans-serif;
+  font-size: clamp(16px, 2.2vw, 32px);
+  padding: clamp(12px, 2vh, 20px) clamp(16px, 2.5vw, 32px);
+  border: 3px solid rgba(255,255,255,0.3);
+  background: rgba(0,0,0,0.3);
+  color: var(--white);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.2s ease;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.fj-answer-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.5);
+}
+
+.fj-answer-btn.selected {
+  background: rgba(255,255,255,0.2);
+  border-color: var(--white);
+  transform: translateZ(0) scale(1.02);
+}
+
+.fj-answer-btn.incorrect:hover,
+.fj-answer-btn.incorrect.selected,
+.fj-answer-btn.correct:hover,
+.fj-answer-btn.correct.selected {
+  border-color: var(--gold);
+  background: rgba(49, 178, 231, 0.2);
+  color: var(--gold);
+}
+
+
+/* ===========================
+   TIE BREAKER SCREEN
+   =========================== */
+
+#fjTieBreaker .fj-rays {
+  top: 44%;  
+}
+
+.fj-tiebreaker-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 4vh, 48px);
+  width: 100%;
+  height: 100%;
+  padding: clamp(32px, 5vh, 64px);
+}
+
+.fj-tiebreaker-title {
+  font-family: "Geoparody", serif;
+  color: var(--white);
+  font-size: clamp(64px, 10vw, 140px);
+  letter-spacing: 0.02em;
+  text-shadow: 6px 6px 0 rgba(0,0,0,0.55);
+}
+
+.fj-tiebreaker-subtitle {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: clamp(18px, 2.2vw, 32px);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-shadow: 0 3px 0 rgba(0,0,0,0.55);
+}
+
+.fj-tiebreaker-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(16px, 2vw, 24px);
+  justify-content: center;
+  align-items: center;
+  max-width: min(900px, 90vw);
+}
+
+.fj-tiebreaker-btn {
+  font-family: "ITCKorrina", sans-serif;
+  font-size: clamp(18px, 2.2vw, 28px);
+  padding: clamp(14px, 2vh, 20px) clamp(28px, 4vw, 48px);
+  background: var(--gold);
+  color: var(--white);
+  border: 3px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.2s ease;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.fj-tiebreaker-btn:hover {
+  background: rgba(215, 175, 55, 0.85);
+  border-color: rgba(255,255,255,0.5);
+  transform: translateY(-2px);
+}
+
+.fj-tiebreaker-btn.selected {
+  background: var(--white);
+  color: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(215, 175, 55, 0.6);
+}
+
+/* =========================
+   WINNER REVEAL SCREEN
+   ========================= */
+
+#fjWinnerReveal {
+  flex-direction: column;
+}
+
+.fj-reveal-text {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: clamp(40px, 7vw, 100px);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-shadow: 0 6px 0 rgba(0,0,0,0.6);
+  text-align: center;
+  /* Fade out effect */
+  transition: opacity 0.5s ease;
+}
+
+/* =========================
+   WINNER PODIUM SCREEN - 3 TILES
+   ========================= */
+
+#fjWinner {
+  padding: 2vh 2vw;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+#fjWinner.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+/* Container matching wager screen */
+.fj-winner-container {
+  width: max(1100px, 95vw);
+  height: min(90vh, 1000px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.5vh, 24px);
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+/* All tiles: Blue background */
+.fj-winner-tile {
+  background: var(--blue);
+  border: var(--line) solid var(--grid);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* All tile content (text, images, buttons) at higher z-index */
+.fj-winner-tile > * {
+  position: relative;
+  z-index: 4;
+}
+
+/* Top Tile: Score */
+.fj-winner-tile-top {
+  flex: 0 0 auto;
+  min-height: clamp(70px, 10vh, 120px);
+  padding: clamp(12px, 2vh, 24px) clamp(20px, 3vw, 40px);
+}
+
+.fj-winner-score {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: clamp(32px, 5vw, 72px);
+  letter-spacing: 0.04em;
+  text-shadow: 
+    0 4px 0 rgba(0,0,0,0.7),
+    0 0 12px rgba(0,0,0,0.3);
+  line-height: 1;
+}
+
+.fj-winner-score.negative {
+  color: #ff3b30;
+}
+
+/* Middle Tile: Signature + Name */
+.fj-winner-tile-middle {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: clamp(20px, 3vh, 40px) clamp(20px, 3vw, 40px);
+  overflow: hidden;
+}
+
+.fj-winner-sig {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fj-winner-sig .sig-img {
+  max-width: 85%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+}
+
+.fj-winner-sig .sig-placeholder {
+  font-family: "Swiss911", sans-serif;
+  color: rgba(255,255,255,0.35);
+  font-size: clamp(16px, 2.5vw, 32px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.fj-winner-name {
+  position: absolute;
+  bottom: clamp(12px, 2vh, 24px);
+  left: clamp(16px, 2.5vw, 32px);
+  font-family: "Swiss911", sans-serif;
+  color: rgba(255,255,255,0.5);
+  font-size: clamp(14px, 2vw, 28px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  max-width: calc(100% - clamp(32px, 5vw, 64px));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Bottom Tile: FINAL SHRUPARDY */
+.fj-winner-tile-bottom {
+  flex: 0 0 auto;
+  min-height: clamp(70px, 10vh, 120px);
+  padding: clamp(12px, 2vh, 24px) clamp(20px, 3vw, 40px);
+}
+
+.fj-winner-footer {
+  font-family: "Geoparody", serif;
+  color: var(--white);
+  font-size: clamp(28px, 4.5vw, 64px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+  line-height: 1;
+}
+
+/* Background layers - z-index order */
+#fjWinner .fj-rays {
+  z-index: 0;
+  --fj-ray-color: rgba(0, 26, 130, 0.6);
+}
+
+#fjWinner #fjWinnerStars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+
+/* =========================
+   SCOREBOARD MODAL
+   ========================= */
+
+#fjScoreboardModal .modal-card {
+  width: min(600px, 92vw);
+  max-height: 80vh;
+}
+
+.fj-scoreboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.fj-score-row {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(0,0,0,0.3);
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+.fj-rank {
+  font-family: "Swiss911", sans-serif;
+  color: var(--gold);
+  font-size: 24px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.fj-score-name {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fj-score-value {
+  font-family: "Swiss911", sans-serif;
+  color: var(--white);
+  font-size: 22px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.fj-score-value.negative {
+  color: #ff3b30;
+}
+
+/* =========================
+   RESPONSIVE ADJUSTMENTS
+   ========================= */
+
+@media (max-height: 768px) {
+  /* Global text adjustments */
+  .fj-title-text { font-size: clamp(50px, 9vw, 120px); }
+  #fjCategory .fj-content { font-size: clamp(32px, 5vw, 70px); }
+  #fjQuestion .fj-content { font-size: clamp(24px, 4vw, 60px); }
+
+  /* Wager bar / podium */
+  .fj-wager-bar { padding: 12px 20px; }
+  .fj-team-podium { gap: 10px; padding: 25px 20px; }
+
+  /* Winner podium */
+  .fj-winner-container { gap: clamp(8px, 1vh, 16px); }
+  .fj-winner-tile-top,
+  .fj-winner-tile-bottom { min-height: clamp(60px, 8vh, 100px); }
+  .fj-winner-score { font-size: clamp(24px, 4vw, 56px); }
+  .fj-winner-footer { font-size: clamp(20px, 3.5vw, 48px); }
+
+  /* Wager podium */
+  .fj-wager-container { gap: clamp(8px, 1vh, 16px); }
+  .fj-wager-tile { min-height: clamp(50px, 7vh, 80px); }
+  .fj-score-tile { min-height: clamp(60px, 8vh, 100px); }
+  .fj-score-display { font-size: clamp(24px, 4vw, 56px); }
+
+  /* Tiebreaker */
+  .fj-tiebreaker-title { font-size: clamp(50px, 8vw, 100px); }
+  .fj-tiebreaker-subtitle { font-size: clamp(16px, 2vw, 24px); }
+  .fj-tiebreaker-btn {
+    font-size: clamp(14px, 1.8vw, 22px);
+    padding: clamp(10px, 1.5vh, 16px) clamp(20px, 3vw, 36px);
+  }
+}
+
+/* Large typography (fine to require both if you want) */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .fj-title-text { font-size: clamp(80px, 13vw, 220px); }
+  #fjCategory .fj-content { font-size: clamp(50px, 7vw, 120px); }
+  #fjQuestion .fj-content { font-size: clamp(40px, 6vw, 110px); }
+
+  .fj-tiebreaker-title { font-size: clamp(80px, 11vw, 180px); }
+  .fj-tiebreaker-subtitle { font-size: clamp(24px, 3vw, 44px); }
+
+  .fj-team-name-overlay { font-size: clamp(60px, 4vw, 100px); }
+  .fj-winner-name { font-size: clamp(60px, 4vw, 100px); }
+  
+  /* Score values */
+  .fj-score-display,
+  .fj-winner-score {
+    font-size: clamp(40px, 5vw, 110px);
+  }
+
+  /* Wager entry (input text) */
+  #fjWager input,
+  .fj-wager-input {
+    font-size: clamp(28px, 4vw, 80px);
+  }
+
+  /* Correct / Incorrect buttons */
+  .fj-btn-correct,
+  .fj-btn-incorrect,
+  .fj-correct-btn,
+  .fj-incorrect-btn {
+    font-size: clamp(22px, 3.5vw, 55px);
+    padding: clamp(14px, 1.2vh, 22px) clamp(22px, 1.8vw, 38px);
+  }
+
+  .fj-winner-footer {
+    font-size: clamp(84px, 6.6vw, 174px);
+  }
+}
+
+}
+
+/* Large screen WIDTH only */
+@media (min-width: 1920px) {
+  .fj-winner-container,
+  .fj-wager-container {
+    width: 94vw;
+  }
+}
+
+/* Tall screen HEIGHT only */
+@media (min-height: 1080px) {
+  .fj-winner-container,
+  .fj-wager-container {
+    height: 88vh;
+  }
+}
+
+@media (max-height: 800px) {
+  .fj-wager-container { gap: 15px; padding: 15px; }
+}
+
+@media (max-height: 600px) {
+  .fj-wager-container { gap: 10px; padding: 10px; }
+  .fj-team-tile { padding: 15px; }
+}
