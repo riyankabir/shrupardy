@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="public/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="public/favicon-16x16.png" />
+  <title>Shrupardy</title>
+
+  <!-- CSS Files (in dependency order) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/board.css">
+  <link rel="stylesheet" href="css/score-strip.css">
+  <link rel="stylesheet" href="css/overlays.css">
+  <link rel="stylesheet" href="css/final-jeopardy.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+</head>
+
+<body>
+  <!-- START SCREEN -->
+  <div id="startScreen" class="screen jeopardy-bg show">
+    <!-- Debug Toggle -->
+    <div class="debug-toggle">
+      <span class="debug-label">Debug</span>
+      <label class="debug-switch">
+        <input type="checkbox" id="debugToggle">
+        <span class="debug-slider"></span>
+      </label>
+    </div>
+
+    <div class="start-main">
+      <div class="start-wrap">
+        <div class="logo">Shrupardy</div>
+        <div id="titleStars" aria-hidden="true"></div>
+        <div class="start-panel">
+          <div class="row">
+            <div class="label">Teams</div>
+            <!-- Visible segmented ui used by JS for team count logic -->
+            <div class="segmented" id="teamCountSeg">
+              <button type="button" data-value="2">2</button>
+              <button type="button" data-value="3">3</button>
+              <button type="button" data-value="4">4</button>
+              <button type="button" data-value="5">5</button>
+              <button type="button" data-value="6">6</button>
+            </div>
+
+            <!-- Hidden <select> used by JS for team count logic -->
+            <select id="teamCount" class="sr-only">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <div class="label">Daily Doubles</div>
+
+            <!-- Visible segmented ui used by JS for team count logic -->
+            <div class="segmented" id="ddCountSeg">
+              <button type="button" data-value="0">0</button>
+              <button type="button" data-value="1">1</button>
+              <button type="button" data-value="2">2</button>
+              <button type="button" data-value="3">3</button>
+            </div>
+
+            <!-- Hidden <select> used by JS for team count logic -->
+            <select id="ddCount" class="sr-only">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <div class="label">Instructions</div>
+            <div style="font-family:ITCKorrina,serif;color:rgba(255,255,255,0.75);text-align:left;letter-spacing:0.03em;">
+              Let's put your Shruti and Shruti-adjacent general trivia knowledge to the test! Game play follows traditional rules (minus the timer because this is a party and I know y'all bitches will buzz too early...) Oh, and the hosts are in charge - argue with the wall!
+            </div>
+          </div>
+        </div>
+
+
+        <div class="start-actions">
+          <button class="btn" id="clearTeamsBtn">Clear All Teams</button>
+          <button class="btn gold" id="startBtn">Start Game</button>
+        </div>
+      </div>
+    </div>
+    <!-- Start screen podium preview -->
+    <div id="scoreStripStart" class="score-strip"></div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="gameScreen" class="screen jeopardy-bg">
+    <div class="board-wrap">
+      <div id="board" class="board"></div>
+    </div>
+    <div id="scoreStripBoard" class="score-strip"></div>
+
+    <div class="corner" style="display: none;">
+      <button class="btn mini" id="resetBtn">Reset</button>
+      <button class="btn mini" id="testFJBtn" style="margin-top: 8px;">Test FJ</button>
+    </div>
+  </div>
+
+  <!-- DAILY DOUBLE OVERLAY -->
+  <div id="ddOverlay" class="jeopardy-bg">
+    <div class="dd-wrap">
+      <div>
+        <div class="dd-text">DAILY DOUBLE</div>
+        <div class="dd-wager-input">
+          <label>Wager Amount:</label>
+          <div class="money-input-wrap">
+            <div class="money-prefix">$</div>
+            <input type="number" id="ddWagerInput" min="0" value="200" />
+          </div>
+        </div>
+        <button class="btn gold" id="ddContinueBtn">Continue</button>
+      </div>
+    </div>
+    <div id="scoreStripDD" class="score-strip"></div>
+  </div>
+
+  <!-- CLUE OVERLAY -->
+  <div id="clueOverlay" class="jeopardy-bg">
+    <div class="clue-area">
+      <button id="backBtn" class="back-btn" aria-label="Back to board">Shrupardy</button>
+      <button id="revealBtn" class="reveal-btn" aria-label="Reveal answer"></button>
+      <button id="mediaBtn" class="media-btn" aria-label="Play media" style="display: none;"></button>
+      <div class="clue-content">
+        <div id="clueText" class="clue-text"></div>
+        <div id="answerText" class="answer-text"></div>
+      </div>
+      <!-- Media popup overlay -->
+      <div id="mediaPopup" class="media-popup" style="display: none;">
+        <div class="media-popup-content">
+          <!-- Video or audio will be inserted here -->
+        </div>
+      </div>
+    </div>
+    <div id="scoreStripClue" class="score-strip"></div>
+  </div>
+
+  <!-- EDIT ALL SCORES MODAL -->
+  <div id="scoresModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-title gold">Edit Scores</div>
+      <div id="scoresGrid" class="scores-grid"></div>
+      <div class="modal-actions">
+        <button class="btn" id="scoresCancel">Cancel</button>
+        <button class="btn gold" id="scoresSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT TEAM (NAME + SIGNATURE) MODAL -->
+  <div id="teamModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-title" id="teamModalTitle">Edit Team</div>
+
+      <div class="score-edit-row">
+        <div class="score-edit-name">Team Name</div>
+        <input id="teamNameInput" />
+      </div>
+
+      <div class="modal-title" style="font-size:16px;opacity:0.9;">Signature</div>
+      <canvas id="sigCanvas" width="1200" height="360"></canvas>
+
+      <div class="modal-actions" style="justify-content:space-between;">
+        <button class="btn" id="sigClear">Clear</button>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn" id="teamCancel">Cancel</button>
+          <button class="btn gold" id="teamSave">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL JEOPARDY: TRIGGER BUTTON -->
+  <div id="fjTrigger" class="fj-overlay jeopardy-bg">
+    <button class="btn gold fj-trigger-btn" id="fjTriggerBtn">Are you ready for...</button>
+  </div>
+
+  <!-- FINAL JEOPARDY: TITLE SCREEN -->
+  <div id="fjTitle" class="fj-overlay jeopardy-bg">
+    <div class="fj-rays"></div>
+    <div id="fjTitleStars" aria-hidden="true"></div>
+    <div class="fj-title-text">
+      <div>FINAL</div>
+      <div>SHRUPARDY</div>
+    </div>
+    <button class="fj-reveal-btn large bottom-right" id="fjRevealBtn1" aria-label="Continue"></button>
+  </div>
+
+  <!-- FINAL JEOPARDY: CATEGORY SCREEN -->
+  <div id="fjCategory" class="fj-overlay jeopardy-bg">
+    <div class="fj-content" id="fjCategoryText"></div>
+    <button class="btn gold fj-arrow" id="fjCategoryArrow">&rarr;</button>
+  </div>
+
+  <!-- FINAL JEOPARDY: QUESTION SCREEN -->
+  <div id="fjQuestion" class="fj-overlay jeopardy-bg">
+    <div class="fj-content" id="fjQuestionText"></div>
+    <button class="btn gold fj-arrow" id="fjQuestionArrow">&rarr;</button>
+  </div>
+
+  <!-- FINAL JEOPARDY: WAGER SCREEN -->
+  <div id="fjWager" class="fj-overlay">
+    <div class="fj-wager-container">
+      <!-- Top Tile: Wager Input (Gold) -->
+      <div class="fj-wager-tile">
+        <span class="fj-wager-currency">$</span>
+        <input 
+          type="number" 
+          id="fjWagerInput" 
+          class="fj-wager-input"
+          placeholder="Enter wager" 
+          min="0"
+        />
+        <button class="fj-lock-btn" id="fjLockBtn">
+          <img src="assets/lock.svg" alt="Lock" />
+        </button>
+      </div>
+
+      <!-- Middle Tile: Team Info (Blue) -->
+      <div class="fj-team-tile">
+        <div id="fjTeamPodium" class="fj-team-podium">
+          <!-- Dynamically populated with signature -->
+        </div>
+        <div id="fjTeamName" class="fj-team-name-overlay">TEAM NAME</div>
+      </div>
+
+      <!-- Bottom Tile: Score/Buttons (Blue) -->
+      <div class="fj-score-tile">
+        <div id="fjScoreDisplay" class="fj-score-display">$0</div>
+        <div id="fjAnswerButtons" class="fj-answer-buttons" style="display: none;">
+          <button class="fj-answer-btn incorrect" id="fjIncorrectBtn">INCORRECT</button>
+          <button class="fj-answer-btn correct" id="fjCorrectBtn">CORRECT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL JEOPARDY: TIE BREAKER INTRO -->
+  <div id="fjTieBreakerIntro" class="fj-overlay jeopardy-bg">
+    <button class="btn gold fj-trigger-btn" id="fjTieBreakerIntroBtn">Oh no, looks like it is time for a...</button>
+  </div>
+
+  <!-- FINAL JEOPARDY: TIE BREAKER SELECTION -->
+  <div id="fjTieBreaker" class="fj-overlay jeopardy-bg">
+    <div class="fj-rays"></div>
+    <div id="fjTieBreakerStars" aria-hidden="true"></div>
+    <div class="fj-tiebreaker-content">
+      <div class="fj-tiebreaker-title">TIE BREAKER</div>
+      <div class="fj-tiebreaker-subtitle">Who won the live tie breaker?</div>
+      <div id="fjTieBreakerButtons" class="fj-tiebreaker-buttons">
+        <!-- Dynamically populated with team buttons -->
+      </div>
+    </div>
+    <button class="fj-reveal-btn large bottom-right" id="fjTieBreakerReveal" aria-label="Continue"></button>
+  </div>
+
+  <!-- FINAL JEOPARDY: WINNER REVEAL -->
+  <div id="fjWinnerReveal" class="fj-overlay jeopardy-bg">
+    <button class="btn gold fj-trigger-btn" id="fjRevealBtn2">And the winner is...</button>
+  </div>
+
+  <!-- FINAL JEOPARDY: WINNER PODIUM -->
+  <div id="fjWinner" class="fj-overlay">
+    <!-- Background layers in order: tiles -> rays -> stars -> content -->
+    <div class="fj-winner-container">
+      <!-- Top Tile: Score (Blue) -->
+      <div class="fj-winner-tile fj-winner-tile-top">
+        <div id="fjWinnerScore" class="fj-winner-score">$0</div>
+        <button class="fj-reveal-btn small" id="fjScoreboardBtn" aria-label="Show scoreboard" style="position: absolute; right: clamp(16px, 2.5vw, 32px);">
+          <span class="fj-btn-label">Scoreboard</span>
+        </button>
+      </div>
+
+      <!-- Middle Tile: Signature + Team Name (Blue) -->
+      <div class="fj-winner-tile fj-winner-tile-middle">
+        <div id="fjWinnerSig" class="fj-winner-sig">
+          <div class="sig-placeholder">SIGNATURE</div>
+        </div>
+        <div id="fjWinnerName" class="fj-winner-name">TEAM NAME</div>
+      </div>
+
+      <!-- Bottom Tile: FINAL SHRUPARDY (Blue) -->
+      <div class="fj-winner-tile fj-winner-tile-bottom">
+        <div class="fj-winner-footer">FINAL SHRUPARDY</div>
+      </div>
+    </div>
+    
+    <!-- Rays layer (behind stars but above tiles) -->
+    <div class="fj-rays rotating"></div>
+    
+    <!-- Stars layer (behind content) -->
+    <div id="fjWinnerStars" aria-hidden="true"></div>
+  </div>
+
+  <!-- FINAL JEOPARDY: SCOREBOARD MODAL -->
+  <div id="fjScoreboardModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-title gold">Final Scoreboard</div>
+      <div id="fjScoreboardList" class="fj-scoreboard-list">
+        <!-- Dynamically populated -->
+      </div>
+      <div class="modal-actions">
+        <button class="btn gold" id="fjScoreboardClose">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Files (in dependency order) -->
+  <script src="config/game-data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/signature.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/score.js"></script>
+  <script src="js/clue.js"></script>
+  <script src="js/daily-double.js"></script>
+  <script src="js/modals.js"></script>
+  <script src="js/final-jeopardy.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+shrupardy
+├── assets
+│   ├── lock.svg
+│   └── reveal.png
+├── config
+│   └── game-data.js
+├── css
+│   ├── animations.css
+│   ├── base.css
+│   ├── board-css-additions.css
+│   ├── board.css
+│   ├── components.css
+│   ├── final-jeopardy.css
+│   ├── overlays.css
+│   ├── overlays.css.backup.css
+│   ├── score-strip.css
+│   ├── score-strip.css.backup.css
+│   └── variables.css
+├── directory.txt
+├── fonts
+│   ├── Geoparody.otf
+│   ├── ITCKorrina.otf
+│   └── Swiss911.otf
+├── index.html
+└── js
+    ├── animations.js
+    ├── app.js
+    ├── board.js
+    ├── clue.js
+    ├── clue.js.backup.js
+    ├── daily-double.js
+    ├── final-jeopardy.js
+    ├── modals.js
+    ├── score.js
+    ├── score.js.backup.js
+    ├── signature.js
+    └── state.js
+
+6 directories, 31 files
