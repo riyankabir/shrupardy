@@ -1,8 +1,11 @@
 /***********************
  * MAIN APPLICATION
- * 
+ *
  * Initializes the game and coordinates all modules
  ***********************/
+
+// Track if sponsor video should be shown (off by default)
+let showSponsorVideo = false;
 
 // Start a new game
 function newGame() {
@@ -24,6 +27,36 @@ function newGame() {
   saveState();
   renderBoard();
   renderScoreStrips();
+
+  // Check if sponsor video should be shown
+  if (showSponsorVideo) {
+    showSponsorScreen();
+  } else {
+    show(document.getElementById("gameScreen"));
+  }
+}
+
+// Show sponsor video screen
+function showSponsorScreen() {
+  const sponsorVideo = document.getElementById("sponsorVideo");
+  show(document.getElementById("sponsorScreen"));
+
+  // Reset and play the video
+  sponsorVideo.currentTime = 0;
+  sponsorVideo.play().catch(() => {
+    // Autoplay may be blocked, that's ok - user can watch or skip
+  });
+}
+
+// Continue from sponsor screen to game
+function continueSponsorToGame() {
+  const sponsorVideo = document.getElementById("sponsorVideo");
+
+  // Pause and reset video
+  sponsorVideo.pause();
+  sponsorVideo.currentTime = 0;
+
+  // Show the game screen
   show(document.getElementById("gameScreen"));
 }
 
@@ -159,6 +192,21 @@ function init() {
     } else {
       corner.style.display = "none"; // Hide debug buttons
     }
+  });
+
+  // Sponsor video toggle handler
+  document.getElementById("sponsorToggle").addEventListener("change", (e) => {
+    showSponsorVideo = e.target.checked;
+  });
+
+  // Sponsor skip button handler
+  document.getElementById("sponsorSkipBtn").addEventListener("click", () => {
+    continueSponsorToGame();
+  });
+
+  // Auto-continue when sponsor video ends
+  document.getElementById("sponsorVideo").addEventListener("ended", () => {
+    continueSponsorToGame();
   });
 }
 
