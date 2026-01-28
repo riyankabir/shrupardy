@@ -1,20 +1,25 @@
 shrupardy
 ├── assets
+│   ├── audios
+│   │   ├── chronic800.m4a
+│   │   ├── screen600.m4a
+│   │   ├── screen800.m4a
+│   │   └── spell1000.m4a
 │   ├── lock.svg
-│   └── reveal.png
+│   ├── reveal.png
+│   └── videos
+│       ├── askALocalMalini.mp4
+│       └── new
 ├── config
 │   └── game-data.js
 ├── css
 │   ├── animations.css
 │   ├── base.css
-│   ├── board-css-additions.css
 │   ├── board.css
 │   ├── components.css
 │   ├── final-jeopardy.css
 │   ├── overlays.css
-│   ├── overlays.css.backup.css
 │   ├── score-strip.css
-│   ├── score-strip.css.backup.css
 │   └── variables.css
 ├── directory.txt
 ├── fonts
@@ -22,18 +27,20 @@ shrupardy
 │   ├── ITCKorrina.otf
 │   └── Swiss911.otf
 ├── index.html
-└── js
-    ├── animations.js
-    ├── app.js
-    ├── board.js
-    ├── clue.js
-    ├── clue.js.backup.js
-    ├── daily-double.js
-    ├── final-jeopardy.js
-    ├── modals.js
-    ├── score.js
-    ├── score.js.backup.js
-    ├── signature.js
-    └── state.js
+├── js
+│   ├── animations.js
+│   ├── app.js
+│   ├── board.js
+│   ├── clue.js
+│   ├── daily-double.js
+│   ├── final-jeopardy.js
+│   ├── modals.js
+│   ├── score.js
+│   ├── signature.js
+│   └── state.js
+├── public
+│   ├── favicon-16x16.png
+│   └── favicon-32x32.png
+└── README.md
 
-6 directories, 31 files
+9 directories, 35 files
