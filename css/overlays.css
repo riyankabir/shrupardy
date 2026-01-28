@@ -194,6 +194,158 @@ input:checked + .debug-slider:hover {
 }
 
 /* =========================
+   SPONSOR TOGGLE
+   ========================= */
+
+.sponsor-toggle {
+  position: absolute;
+  top: 54px;
+  right: 20px;
+  display: none; /* Hidden by default */
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+/* Only show on start screen */
+#startScreen .sponsor-toggle {
+  display: flex;
+}
+
+.sponsor-label {
+  font-family: "ITCKorrina", serif;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sponsor-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.sponsor-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.sponsor-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.sponsor-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: rgba(255, 255, 255, 0.25);
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .sponsor-slider {
+  background-color: rgba(215, 175, 55, 0.3);
+  border-color: rgba(215, 175, 55, 0.5);
+}
+
+input:checked + .sponsor-slider:before {
+  transform: translateX(20px);
+  background-color: var(--gold);
+}
+
+.sponsor-slider:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+input:checked + .sponsor-slider:hover {
+  background-color: rgba(215, 175, 55, 0.4);
+}
+
+/* =========================
+   SPONSOR VIDEO SCREEN
+   ========================= */
+
+#sponsorScreen {
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  place-items: center;
+  z-index: 15;
+}
+
+.sponsor-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.sponsor-title {
+  font-family: "ITCKorrina", serif;
+  color: var(--gold);
+  font-size: clamp(24px, 4vw, 48px);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.55);
+}
+
+.sponsor-video-container {
+  position: relative;
+  width: 100%;
+  max-width: min(900px, 85vw);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sponsor-video {
+  width: 100%;
+  max-width: 100%;
+  max-height: calc(100vh - 250px);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+#sponsorSkipBtn {
+  margin-top: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-height: 768px) {
+  .sponsor-title {
+    font-size: clamp(18px, 3vw, 32px);
+  }
+
+  .sponsor-video {
+    max-height: calc(100vh - 180px);
+  }
+
+  .sponsor-wrap {
+    gap: 16px;
+    padding: 16px;
+  }
+}
+
+/* =========================
    CLUE & DD OVERLAYS
    ========================= */
 

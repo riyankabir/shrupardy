@@ -118,5 +118,6 @@ function renderBoard() {
 function show(screen) {
   document.getElementById("startScreen").classList.remove("show");
   document.getElementById("gameScreen").classList.remove("show");
+  document.getElementById("sponsorScreen").classList.remove("show");
   screen.classList.add("show");
 }
