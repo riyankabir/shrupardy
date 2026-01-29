@@ -39,13 +39,16 @@ function showClue(c, r) {
     // Store media path for later use
     mediaBtn.dataset.mediaPath = clue.m;
 
-    // Auto-play video on first open
-    if (clue.m.startsWith("video:")) {
+    /// Auto-play video ONLY if autoplay is not explicitly false
+    const shouldAutoplay = clue.p !== false; // Default to true
+    const isVideo = clue.m.startsWith("video:");
+    
+    if (isVideo && shouldAutoplay) {
       // Small delay to ensure overlay is visible
       setTimeout(() => {
         playMedia(clue.m);
       }, 0);
-    }
+    } 
   } else {
     mediaBtn.style.display = "none";
     mediaBtn.dataset.mediaPath = "";
