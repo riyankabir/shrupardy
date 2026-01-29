@@ -11,7 +11,7 @@ const GAME = {
   currency: "$",
   
   // Point values for each row (must have exactly 5 values)
-  values: [200, 400, 600, 800, 1000],
+  values: [400, 800, 1200, 1600, 2000],
   
   // Categories (must have exactly 6 categories, each with 5 clues)
   categories: [
