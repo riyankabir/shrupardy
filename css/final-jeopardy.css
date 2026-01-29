@@ -189,11 +189,26 @@
   letter-spacing: 0.02em;
   line-height: 1.3;
   text-shadow: 0 4px 0 rgba(0,0,0,0.6);
-  max-width: 90vw;
-  padding: 2vmin;
+
+  /* Safe rectangle */
+  width: 80vw;
+  height: 75vh;
+  margin: auto;
+
+  /* Important: prevents the arrow overlap by creating a “title safe” inset */
+  /* padding: 6vh 8vw 10vh 6vw; /* top right bottom left */
+  padding: 6vh 6vw;
+  box-sizing: border-box;
+
+  /* Center text within the rectangle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
+
 
 .fj-arrow {
   position: fixed;

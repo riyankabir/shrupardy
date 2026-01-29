@@ -102,12 +102,44 @@ function showFJQuestion() {
   
   const questionText = document.getElementById("fjQuestionText");
   questionText.textContent = GAME.finalJeopardy.question;
+
+  // Resize AFTER text renders
+  requestAnimationFrame(() => autoFitText(questionText, 80, 24));
   
   document.getElementById("fjQuestionArrow").addEventListener("click", () => {
     overlay.classList.remove("show");
     startFJWagers();
   });
 }
+
+function autoFitText(el, maxFont = 72, minFont = 20) {
+  if (!el) return;
+
+  // Start large
+  el.style.fontSize = maxFont + "px";
+
+  // Fit INSIDE the element's own box (your 80vw/75vh safe rectangle)
+  while (
+    (el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth) &&
+    parseInt(el.style.fontSize, 10) > minFont
+  ) {
+    el.style.fontSize = (parseInt(el.style.fontSize, 10) - 2) + "px";
+  }
+}
+
+function refitVisibleFJText() {
+  const question = document.getElementById("fjQuestionText");
+
+  if (question && question.offsetParent !== null) {
+    autoFitText(question, 80, 24);
+  }
+}
+
+let resizeTimeout;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(refitVisibleFJText, 100);
+});
 
 // ===========================
 // WAGER SCREENS

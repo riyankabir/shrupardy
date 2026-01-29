@@ -52,11 +52,9 @@ const GAME = {
         { q: "\"I may be bad but I’m perfectly good at it\"", 
           a: "What is Song, 'S&M' on <i>Loud<i>, Rihanna?" },
         { q: "\"But what you don't know is that that sweater is not just blue, it's not turquoise, it's not lapis, it's actually cerulean.\"", 
-          a: "What is Movie, Devil Wears Prada, Miranda Priestley played by Meryl Streep?",
-          m: "audio:assets/audios/screen600.m4a"},
+          a: "What is Movie, Devil Wears Prada, Miranda Priestley played by Meryl Streep?"},
         { q: "\"After he literally did his big one up there. That was like a movie. He stood up there and said, 'Now... you're sending three home' and then you're still here, b*tch, in your overalls. Now what?\"",
-          a: "What is TV Show, Love Island USA, Leah Kateb?",
-          m: "audio:assets/audios/screen800.m4a"},
+          a: "What is TV Show, Love Island USA, Leah Kateb?"},
         { q: "\"You would think we live in Baltimore, the way they Raven 'bout the latest product\"", 
           a: "What is Song, 'Middle of the Ocean' on <i>Her Loss<i>, Drake?" },
       ]
@@ -118,8 +116,8 @@ const GAME = {
 
   // Final Jeopardy configuration
   finalJeopardy: {
-    category: "SHRUTI'S NEXT STOP",
-    question: "NEED TO ADD",
+    category: "THE CITY OF ANGELS",
+    question: "Our future doctor may frequent Barry’s West Hollywood not just for fitness, but also in hopes of spotting this celeb, a known regular and her former teen crush - if he ever gets hurt and needs stitches, she’ll be ready for their meet-cute.",
     answer: "What is NEED TO ADD?",
     timings: {
       buttonFade: 500,        // Button fade out duration (ms)
